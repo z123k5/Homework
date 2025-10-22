@@ -1,6 +1,9 @@
 #include <iostream>
+#include <random>
 using std::cout;
 using std::endl;
+using std::uniform_int_distribution;
+using std::mt19937;
 
 void MergeSortL(int *array, int size);
 
@@ -15,7 +18,7 @@ void QuickSort(int *array, int left, int right);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+int counter;
 // 1.1
 void MergeSortL(int *array, int size) {
   int *temp = new int[size];
@@ -34,17 +37,25 @@ void MergeSortL(int *array, int size) {
 void MergeL(int temp[], int *part1, int *part2, int len1, int len2) {
   int i = 0, j = 0, k = 0;
   while (i < len1 && j < len2) {
+	  counter++;
     if (part1[i] <= part2[j]) {
       temp[k] = part1[i++];
     } else {
       temp[k] = part2[j++];
     }
+    // Test
+    counter++;
+    // End Test
     k++;
   }
-  while (i < len1)
+  while (i < len1) {
     temp[k++] = part1[i++];
-  while (j < len2)
+    counter++;
+  }
+  while (j < len2) {
     temp[k++] = part2[j++];
+    counter++;
+  }
 }
 
 // 1.1
@@ -65,9 +76,12 @@ int FindPivot(int *array, int left, int right) {
     while (p <= array[j] && i <= j)
       j--;
 
-    if (i < j)
+    if (i < j) {
       std::swap(array[i], array[j]);
+      counter++;
+    }
   }
+  counter ++;
   std::swap(array[left], array[j]);
   return j;
 }
@@ -88,8 +102,10 @@ void BinaryInSort(int *array, int size) {
     }
     for (m = i - 1; m >= l; m--) {
       array[m + 1] = array[m];
+      counter ++;
     }
     array[l] = x;
+    counter++;
   }
 }
 
@@ -145,6 +161,48 @@ int BinarySearchTop(int *array, int size) {
   return -1;
 }
 
+
+
+int BinarySearchOnHighNoExist(int *array, int size, int k) {
+	int l=0, r=size-1, m;
+	while (l<=r) {
+		m=(l+r)/2;
+		if (array[m] > k) {
+			r=m-1;
+		} else if (array[m] < k) {
+			l=m+1;
+		} else return m;
+	}
+	return m;
+}
+
+int BinarySearchOnLowNoExist(int *array, int size, int k) {
+	int l=0, r=size-1, m;
+	while (l<=r) {
+		m=(l+r)/2;
+		if (array[m] > k) {
+			r=m-1;
+		} else if (array[m] < k) {
+			l=m+1;
+		} else return m;
+	}
+	return m;
+}
+
+void SelectRange(int *array, int size, int low, int high) {
+	// O(logn)
+	int lowInd= BinarySearchOnHighNoExist(array, size, low);
+	// O(logn)
+	int highInd= BinarySearchOnLowNoExist(array, size, high);
+	// find them!
+	for (int i=lowInd+1; i<highInd+1; i++) {
+		std::cout << array[i] << ' ';
+	}
+	std::cout << std::endl;
+}
+
+
+
 int main() {
   int sort_data[20] = {2,  1,  7,  9,  6,  4,  8,  5,  3,  10,
                        12, 11, 14, 13, 16, 15, 19, 17, 18, 0};
@@ -167,8 +225,31 @@ int main() {
   // QuickSort(sort_data, 0, 19);
   // BinaryInSort(sort_data, 20);
   // ReassignArray(data2, 20);
-  // Hanoi(5, 'A', 'B', 'C');
+  // Hanoi(3, 'A', 'B', 'C');
+  
+  int solveLength[] = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000,10000};
+
+  for (int i=0; i< sizeof(solveLength)/ sizeof(int); i++) {
+	  int *test_arr = new int[solveLength[i]];
+	  // Gen data
+	  std:: mt19937 gen(100);
+	  for (int j=0; j<solveLength[i]; j++) {
+		  std::uniform_int_distribution<int> dist(0, solveLength[i]);
+		test_arr[j] = dist(gen);
+	  }
+
+	  counter = 0;
+	  //MergeSortL(test_arr, solveLength[i]);
+	  QuickSort(test_arr, 0, solveLength[i]-1);
+	  delete[] test_arr;
+	  // output
+	  std::cout << "MergeSort: size=" << solveLength[i] << " tick=" << counter << std::endl;
+  }
   std::cout << "top is at #" << BinarySearchTop(peakData, 20) << endl;
+
+  int rangeData[]={1,2,3,3,5,6,7,8,10,10};
+
+  SelectRange(rangeData,10, 4, 9);
 
   // for (int i = 0; i < 20; i++) {
   //   cout << data2[i] << " ";
