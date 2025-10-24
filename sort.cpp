@@ -164,38 +164,40 @@ int BinarySearchTop(int *array, int size) {
 
 
 int BinarySearchOnHighNoExist(int *array, int size, int k) {
+	// find first number x >= k (Right Edge)
 	int l=0, r=size-1, m;
 	while (l<=r) {
 		m=(l+r)/2;
-		if (array[m] > k) {
-			r=m-1;
+		if (array[m] >= k) {
+			r=m - 1;
 		} else if (array[m] < k) {
 			l=m+1;
-		} else return m;
+		}
 	}
-	return m;
+	return l;
 }
 
 int BinarySearchOnLowNoExist(int *array, int size, int k) {
+	// find first number x > k (Left Edge)
 	int l=0, r=size-1, m;
 	while (l<=r) {
 		m=(l+r)/2;
 		if (array[m] > k) {
-			r=m-1;
-		} else if (array[m] < k) {
+			r=m - 1;
+		} else if (array[m] <= k) {
 			l=m+1;
-		} else return m;
+		}
 	}
-	return m;
+	return l;
 }
 
 void SelectRange(int *array, int size, int low, int high) {
 	// O(logn)
-	int lowInd= BinarySearchOnHighNoExist(array, size, low);
+	int lowInd= BinarySearchOnLowNoExist(array, size, low);
 	// O(logn)
-	int highInd= BinarySearchOnLowNoExist(array, size, high);
+	int highInd= BinarySearchOnHighNoExist(array, size, high);
 	// find them!
-	for (int i=lowInd+1; i<highInd+1; i++) {
+	for (int i=lowInd; i<highInd; i++) {
 		std::cout << array[i] << ' ';
 	}
 	std::cout << std::endl;
@@ -226,7 +228,7 @@ int main() {
   // BinaryInSort(sort_data, 20);
   // ReassignArray(data2, 20);
   // Hanoi(3, 'A', 'B', 'C');
-  
+  /*
   int solveLength[] = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000,10000};
 
   for (int i=0; i< sizeof(solveLength)/ sizeof(int); i++) {
@@ -246,10 +248,10 @@ int main() {
 	  std::cout << "MergeSort: size=" << solveLength[i] << " tick=" << counter << std::endl;
   }
   std::cout << "top is at #" << BinarySearchTop(peakData, 20) << endl;
+*/
+  int rangeData[]={1,2,3,4,5,6,7,8,9,10};
 
-  int rangeData[]={1,2,3,3,5,6,7,8,10,10};
-
-  SelectRange(rangeData,10, 4, 9);
+  SelectRange(rangeData,10, 3, 9);
 
   // for (int i = 0; i < 20; i++) {
   //   cout << data2[i] << " ";
