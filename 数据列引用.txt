@@ -1,0 +1,33 @@
+Glmer（Misinfogame加问卷星）.xlsx
+预处理
+1. Participant_Type
+2. Session ID
+3. Participant ID
+
+GLM分析：
+
+
+3. Dislike
+4. Like
+5. Share
+\  Share .i
+6. Flag
+\  Flag.i
+7. Participant_Type
+8. 
+
+Purchase_Intention_Avg （由`购买意向`,`Purchase Intention`计算出）
+
+识别问卷星的李科特七分量表数据列：
+排除以下的列的其他所有列：
+1. Participant_Type
+\  Session ID
+\  Participant ID
+2. Purchase_Intention_Avg （由计算出）
+3. Dislike
+4. Like
+5. Share
+\  Share .i
+6. Flag
+\  Flag.i
+7. Participant_Type
